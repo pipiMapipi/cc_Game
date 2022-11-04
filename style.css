@@ -1,0 +1,22 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: "Silkscreen", cursive;
+}
+
+canvas {
+    width: 600px !important;
+    height: 400px !important;
+    image-rendering: pixelated;
+}
+
+@font-face {
+    font-family: "Rainy Hearts";
+    src: url("assets/rainyhearts.ttf");
+}
+
+button {
+    font-family: "Rainy Hearts";
+}
