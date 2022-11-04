@@ -8,6 +8,7 @@ let walls = [];
 const roadWidth = 100;
 let haveTicket = false;
 let haveLife = false;
+let haveScarf = false;
 
 let life = {now: 10, total: 10};
 
@@ -19,7 +20,7 @@ let showFigure = false;
 
 function preload() {
   // load walls
-  for (let i = 0; i <= 2; i ++) {
+  for (let i = 0; i <= 4; i ++) {
     walls[i] = loadImage("assets/wall" + i + ".png");
   }
 
@@ -51,6 +52,7 @@ function draw() {
       sceneChange();
       if (me.col <= r) {
         nextScene = true;
+        me.col = height-r;
       }
 
       break;
@@ -75,19 +77,9 @@ function draw() {
 }
 
 
-
-function scene3() {
-  background(0, 0, 255);
-}
-
-function scene4() {
-  
-}
-
 function sceneChange() {
   if (nextScene) {
     scene ++;
-    me.col = height-r;
     nextScene = false;
   }
 }
@@ -127,6 +119,10 @@ function keyPressed() {
     if (keyCode === 13) {
       haveLife = true;
     }
+  } else if (scene == 4 && scarfDisplay()) {
+    if (keyCode === 13) {
+      haveScarf = true;
+    } 
   }
 
 }
@@ -145,6 +141,13 @@ if (haveLife) {
     fill(0, 255, 0);
     let remainLife = map(life.now, 0, 10, 0, life.total*6);
     rect(520, 15, remainLife, 15);
+  }
+}
+
+function scarfIcon() {
+  if (haveScarf) {
+    fill(0);
+    rect(me.row-r, me.col, r*2, 10);
   }
 }
 
@@ -173,8 +176,9 @@ function checkTicket(museum, door) {
       rect(width/2-door.w, museum.h-door.h-25, door.w*2, door.h);
       showFigure = true;
     } else {
-      sceneChange();
       nextScene = true;
+      sceneChange();
+      me.col = height-r;
     }
   }
 
@@ -245,6 +249,63 @@ function nextRoom() {
       if (me.row+r > width) {
         nextScene = true;
         sceneChange();
+        me.row = r;
       }
     }
+}
+
+
+/////////////// Scene 3 ///////////////
+function scene3() {
+  background(0, 0, 255);
+  fill(220);
+  rect(0, height/2, width, roadWidth);
+  fill(255);
+  ellipse(me.row, me.col, r*2);
+  checkMovement();
+  ticketIcon();
+  lifeIcon();
+
+  if (me.row+r > width) {
+    nextScene = true;
+    sceneChange();
+    me.row = r;
+  }
+}
+
+
+
+/////////////// Scene 4 ///////////////
+function scene4() {
+  background(0, 0, 255);
+  fill(220);
+  rect(0, height/2, width/2+roadWidth/2, roadWidth);
+  rect(width/2-roadWidth/2, 0, roadWidth, height/2+roadWidth);
+  fill(255);
+  ellipse(me.row, me.col, r*2);
+  checkMovement();
+  ticketIcon();
+  lifeIcon();
+
+  scarfDisplay();
+  scarfIcon();
+}
+
+function scarfDisplay() {
+  fill(150);
+  rect(width/2-45, height/2+5, 90, 90);
+  rect(width/2+85, height/2+5, 90, 90);
+
+  let touchScarf = collideRectCircle(width/2-45, height/2+5, 90, 90, me.row, me.col, (r+meSpeed)*2);
+  if (touchScarf) {
+    if (!haveScarf) {
+      fill(250);
+      rect(width/2-30, height/2+110, 60, 20);
+    } else {
+      fill(0);
+      rect(width/2-30, height/2+110, 60, 20);
+    }
+    
+  }  
+  return touchScarf;
 }
