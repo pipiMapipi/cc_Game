@@ -2,13 +2,13 @@ class Mouth {
   constructor(_x, _y) {
     this.x = _x;
     this.y = _y;
-    this.r = 40;
+    this.r = 20;
     this.time = 0;
   }
 
   display() {
     fill(255, 0, 0);
-    ellipse(this.x, this.y, this.r, this.r + cos(millis() / 80) * 5);
+    ellipse(this.x, this.y, this.r * 2, this.r * 2 + cos(millis() / 80) * 5);
   }
 
   catchDetection() {

@@ -4,7 +4,8 @@ class Monster {
     this.col = _col;
     this.r = _r;
     this.me = _me;
-    this.speed = 30;
+    this.speed = 50;
+    this.jump = 3;
   }
 
   display() {
@@ -13,8 +14,8 @@ class Monster {
   }
 
   checkMovement() {
-    let posX = (this.me.row - this.row) / this.speed;
-    let posY = (this.me.col - this.col) / this.speed;
+    let posX = constrain((this.me.row - this.row) / this.speed, -4, 4);
+    let posY = constrain((this.me.col - this.col) / this.speed, -4, 4);
 
     if (
       !isWall(scene, this.row + posX, this.col) &&
@@ -24,45 +25,37 @@ class Monster {
       this.col += posY;
     }
 
-    if (isWall(scene, this.row, this.col + posY)) {
-      //   this.row += previousX;
-      this.row -= 3;
+    if (this.me.col >= this.col) {
+      if (isWall(scene, this.row, this.col + posY)) {
+        if (this.col < height / 2 || this.col > 250) {
+          this.row -= this.jump;
+        } else {
+          this.row += this.jump;
+        }
+      }
+      if (isWall(scene, this.row + posX, this.col)) {
+        this.col += this.jump;
+      }
+    } else {
+      if (isWall(scene, this.row, this.col + posY)) {
+        if (this.col < height / 2 || this.col > 250) {
+          this.row += this.jump;
+        } else {
+          this.row -= this.jump;
+        }
+      }
+      if (isWall(scene, this.row + posX, this.col)) {
+        this.col -= this.jump;
+      }
     }
-    if (
-      this.row < this.me.row &&
-      this.col > this.me.col &&
-      isWall(scene, this.row + posX, this.col)
-    ) {
-      this.col -= 3;
-    }
-    if (
-      this.row >= this.me.row &&
-      this.col < this.me.col &&
-      isWall(scene, this.row + posX, this.col)
-    ) {
-      this.col += 3;
-    }
+  }
 
-    // if (
-    //   this.row > this.me.row + 1 &&
-    //   !isWall(scene, this.row - this.speed, this.col)
-    // ) {
-    //   this.row -= this.speed;
-    // } else if (
-    //   this.row < this.me.row - 1 &&
-    //   !isWall(scene, this.row + this.speed, this.col)
-    // ) {
-    //   this.row += this.speed;
-    // } else if (
-    //   this.col > this.me.col + 1 &&
-    //   !isWall(scene, this.row, this.col - this.speed)
-    // ) {
-    //   this.col -= this.speed;
-    // } else if (
-    //   this.col < this.me.col - 1 &&
-    //   !isWall(scene, this.row, this.col + this.speed)
-    // ) {
-    //   this.col += this.speed;
-    // }
+  kill() {
+    if (
+      dist(this.row, this.col, this.me.row, this.me.col) <
+      this.r + this.me.r - meSpeed
+    ) {
+      life.now = 0;
+    }
   }
 }

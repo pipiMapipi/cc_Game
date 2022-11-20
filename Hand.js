@@ -58,8 +58,14 @@ class Hand {
 
   catchDetection() {
     if (
-      (this.side == 1 && me.row + me.r >= 295 && me.col + me.r > this.y) ||
-      (this.side == -1 && me.row - me.r <= 305 && me.col + me.r > this.y)
+      (this.side == 1 &&
+        me.row + me.r >= this.startX - 55 &&
+        me.col + me.r > this.y - 35 &&
+        me.col - me.r < this.y + 35) ||
+      (this.side == -1 &&
+        me.row - me.r <= this.startX + 125 &&
+        me.col + me.r > this.y - 35 &&
+        me.col - me.r < this.y + 35)
     ) {
       this.time += 0.04;
       if (this.time <= 0.04) {
