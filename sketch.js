@@ -241,6 +241,11 @@ function mousePressed() {
     BE = false;
     exist = false;
     fadeOffset = 0;
+    extraLife = false;
+    evilFlower = false;
+    pick = false;
+    approachMonster = false;
+    monsterAttack = false;
   }
 }
 
